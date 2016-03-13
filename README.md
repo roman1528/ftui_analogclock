@@ -18,11 +18,11 @@ Es stehen derzeit 3 "themes" zur auswahl.
 <div data-type="analogclock" data-theme="blue"></div>
 ```
 
-![](http://github.com/roman1528/ftui_analogclock/analogclock_default.png)
+![](http://github.com/roman1528/ftui_analogclock/blob/master/analogclock_default.png)
 
-![](http://github.com/roman1528/ftui_analogclock/analogclock_blue.png)
+![](http://github.com/roman1528/ftui_analogclock/blob/master/analogclock_blue.png)
 
-![](http://github.com/roman1528/ftui_analogclock/analogclock_custom.png)
+![](http://github.com/roman1528/ftui_analogclock/blob/master/analogclock_custom.png)
 
 Das custom-Theme ist dazu gedacht verändert zu werden und steht deshalb als erstes in der analogclock.css.
 Hier kann auch die Größe angepasst werden. Die wichtigsten Zeilen sind kommentiert.
