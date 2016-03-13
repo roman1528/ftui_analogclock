@@ -28,3 +28,4 @@ Das custom-Theme ist dazu gedacht verändert zu werden und steht deshalb Als ers
 hier kann auch die Größe angepasst werden. Die wichtigsten Zeilen sind kommentiert.
 
 ....
+ 
