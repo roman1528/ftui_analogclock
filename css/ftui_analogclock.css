@@ -98,7 +98,7 @@
     left: 50%;
 }
 
-.custom.hand, .hand.hour {
+.custom.hand, .custom.hand.hour {
     position: absolute;
     width: 2px; /* width of hour hand */
     height: 30%; /* height of hour hand */
@@ -236,7 +236,7 @@
     left: 50%;
 }
 
-.default.hand, .hand.hour {
+.default.hand, .default.hand.hour {
     position: absolute;
     width: 2px; /* width of hour hand */
     height: 30%; /* height of hour hand */
@@ -374,7 +374,7 @@
     left: 50%;
 }
 
-.blue.hand, .hand.hour {
+.blue.hand, .blue.hand.hour {
     position: absolute;
     width: 2px; /* width of hour hand */
     height: 30%; /* height of hour hand */
