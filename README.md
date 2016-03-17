@@ -1,6 +1,7 @@
 # Analogclock - Widget für FTUI
-
 Zeigt eine Analoge Uhr an.
+
+![](https://raw.githubusercontent.com/roman1528/ftui_analogclock/master/default.png)
 
 ```html
 <div data-type="analogclock">
