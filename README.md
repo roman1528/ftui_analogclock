@@ -2,10 +2,10 @@
 
 Zeigt eine Analoge Uhr an.
 
-[code]
+```html
 <div data-type="analogclock">
 </div>
-[/code]
+```
 Stellt eine circa 100 Pixel große Analoguhr dar.
 
 
