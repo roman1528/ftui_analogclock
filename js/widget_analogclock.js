@@ -3,7 +3,13 @@ if(typeof widget_widget == 'undefined') {
     loadplugin('widget_widget');
 }
 
-$('head').append('<link rel="stylesheet" href="/fhem/tablet/css/ftui_analogclock.css" type="text/css" />');
+var isMSIE = /*@cc_on!@*/0;
+
+if (isMSIE) {
+  dynamicload('lib/jquery.analogclock.excanvas.js', null, null, false);
+}
+
+dynamicload('lib/jquery.analogclock.js', null, null, false);
 	
 // widget implementation starts here
 // change 'widget_example' to 'widget_mywidgetname'
@@ -12,7 +18,23 @@ var widget_analogclock = $.extend({}, widget_widget, {
     widgetname:"analogclock",
     // privat sub function
     init_attr: function(elem) {
-        elem.initData('theme' ,	'default');
+        elem.initData('size', '100');
+        elem.initData('date-color', '');
+        elem.initData('body', 'round');
+        elem.initData('body-color', '#FFFFFF');
+        elem.initData('stroke-color', '#000000');
+        elem.initData('dial', 'full');
+        elem.initData('dial-color', '#3C3C3C');
+        elem.initData('hour', 'pointed');
+        elem.initData('hour-color', '#000000');
+        elem.initData('minute', 'pointed');
+        elem.initData('minute-color', '#000000');
+        elem.initData('second', 'bar');
+        elem.initData('second-color', '#C80000');
+        elem.initData('boss', 'none');
+        elem.initData('boss-color', '#000000');
+        elem.initData('mbehave', 'bounce');
+        elem.initData('sbehave', 'bounce');
     },
     // mandatory function, get called on start up
     init: function () {
@@ -20,43 +42,196 @@ var widget_analogclock = $.extend({}, widget_widget, {
         this.elements = $('div[data-type="'+this.widgetname+'"]');
         this.elements.each(function(index) {
             base.init_attr($(this));
-			var text = "";
+			var elem = $(this);
 			
-			text += "<div id=\"liveclock\" class=\"analogclock outer_face\">";
-			text += "<div class=\"analogclock marker oneseven\"></div>";
-			text += "<div class=\"analogclock marker twoeight\"></div>";
-			text += "<div class=\"analogclock marker fourten\"></div>";
-			text += "<div class=\"analogclock marker fiveeleven\"></div>";
-			text += "<div class=\"analogclock inner_face\">";
-			text += "<div class=\"analogclock hand hour\"></div>";
-			text += "<div class=\"analogclock hand minute\"></div>";
-			text += "<div class=\"analogclock hand second\"></div>";
-			text += "</div>";
-			text += "</div>";
-			text += "<script type=\"text/javascript\">";
-			text += "var $hands = $(\'#liveclock div.hand\');";
-			text += "window.requestAnimationFrame = window.requestAnimationFrame";
-			text += "|| window.mozRequestAnimationFrame";
-			text += "|| window.webkitRequestAnimationFrame";
-			text += "|| window.webkitRequestAnimationFrame";
-			text += "|| window.msRequestAnimationFrame";
-			text += "|| function(f){setTimeout(f, 60)};";
-			text += "function updateclock(){";
-			text += "var curdate = new Date();";
-			text += "var hour_as_degree = ( curdate.getHours() + curdate.getMinutes()/60 ) / 12 * 360;";
-			text += "var minute_as_degree = curdate.getMinutes() / 60 * 360;";
-			text += "var second_as_degree = ( curdate.getSeconds() + curdate.getMilliseconds()/1000 ) /60 * 360;";
-			text += "$hands.filter(\'.hour\').css({transform: \'rotate(\' + hour_as_degree + \'deg)\' });";
-			text += "$hands.filter(\'.minute\').css({transform: \'rotate(\' + minute_as_degree + \'deg)\' });";
-			text += "$hands.filter(\'.second\').css({transform: \'rotate(\' + second_as_degree + \'deg)\' });";
-			text += "requestAnimationFrame(updateclock);}";
-			text += "requestAnimationFrame(updateclock);";
-			text += "</script>";
+			var clock = new StationClock("clock");
 			
-			$(this).html(text);
+			if (elem.data('body')) {
+				var body = elem.data('body');
+				if (body == 'none') {
+					clock.body = StationClock.NoBody;
+				}
+				else if (body == 'small') {
+					clock.body = StationClock.SmallWhiteBody;
+				}
+				else if (body == 'green') {
+					clock.body = StationClock.RoundGreenBody;
+				}
+				else if (body == 'square') {
+					clock.body = StationClock.SquareBody;
+				}
+				else if (body == 'vienna') {
+					clock.body = StationClock.ViennaBody;
+				}
+				else {
+					clock.body = StationClock.RoundBody;
+				}
+			}
+			else {
+				clock.body = StationClock.RoundBody;
+			}
 			
-			if($(this).data('theme')) {
-			$( ".analogclock" ).addClass($(this).data('theme'));}
+			if (elem.data('dial')) {
+				var dial = elem.data('dial');
+				if (dial == 'none') {
+					clock.dial = StationClock.NoDial;
+				}
+				else if (dial == 'hour') {
+					clock.dial = StationClock.GermanHourStrokeDial;
+				}
+				else if (dial == 'austria') {
+					clock.dial = StationClock.AustriaStrokeDial;
+				}
+				else if (dial == 'swiss') {
+					clock.dial = StationClock.SwissStrokeDial;
+				}
+				else if (dial == 'vienna') {
+					clock.dial = StationClock.ViennaStrokeDial;
+				}
+				else {
+					clock.dial = StationClock.GermanStrokeDial;
+				}
+			}
+			else {
+				clock.dial = StationClock.GermanStrokeDial;
+			}
+			
+			if (elem.data('hour')) {
+				var hour = elem.data('hour');
+				if (hour == 'bar') {
+					clock.hourHand = StationClock.BarHourHand;
+				}
+				else if (hour == 'swiss') {
+					clock.hourHand = StationClock.SwissHourHand;
+				}
+				else if (hour == 'vienna') {
+					clock.hourHand = StationClock.ViennaHourHand;
+				}
+				else {
+					clock.hourHand = StationClock.PointedHourHand;
+				}
+			}
+			else {
+				clock.hourHand = StationClock.PointedHourHand;
+			}
+			
+			if (elem.data('minute')) {
+				var minute = elem.data('minute');
+				if (minute == 'bar') {
+					clock.minuteHand = StationClock.BarMinuteHand;
+				}
+				else if (minute == 'swiss') {
+					clock.minuteHand = StationClock.SwissMinuteHand;
+				}
+				else if (minute == 'vienna') {
+					clock.minuteHand = StationClock.ViennaMinuteHand;
+				}
+				else {
+					clock.minuteHand = StationClock.PointedMinuteHand;
+				}
+			}
+			else {
+				clock.minuteHand = StationClock.PointedMinuteHand;
+			}
+			
+			if (elem.data('second')) {
+				var second = elem.data('second');
+				if (second == 'none') {
+					clock.secondHand = StationClock.NoSecondHand;
+				}
+				else if (second == 'hole') {
+					clock.secondHand = StationClock.HoleShapedSecondHand;
+				}
+				else if (second == 'longhole') {
+					clock.secondHand = StationClock.NewHoleShapedSecondHand;
+				}
+				else if (second == 'swiss') {
+					clock.secondHand = StationClock.SwissSecondHand;
+				}
+				else {
+					clock.secondHand = StationClock.BarSecondHand;
+				}
+			}
+			else {
+				clock.secondHand = StationClock.BarSecondHand;
+			}
+			
+			if (elem.data('boss')) {
+				var boss = elem.data('boss');
+				if (boss == 'big') {
+					clock.boss = StationClock.BlackBoss;
+				}
+				else if (boss == 'small') {
+					clock.boss = StationClock.RedBoss;
+				}
+				else if (boss == 'medium') {
+					clock.boss = StationClock.ViennaBoss;
+				}
+				else {
+					clock.boss = StationClock.NoBoss;
+				}
+			}
+			else {
+				clock.boss = StationClock.NoBoss;
+			}
+			
+			if (elem.data('mbehave')) {
+				var mbehave = elem.data('mbehave');
+				if (mbehave == 'creep') {
+					clock.minuteHandBehavoir = StationClock.CreepingMinuteHand;
+				}
+				else if (mbehave == 'ebounce') {
+					clock.minuteHandBehavoir = StationClock.ElasticBouncingMinuteHand;
+				}
+				else {
+					clock.minuteHandBehavoir = StationClock.BouncingMinuteHand;
+				}
+			}
+			else {
+				clock.minuteHandBehavoir = StationClock.BouncingMinuteHand;
+			}
+			
+			if (elem.data('sbehave')) {
+				var sbehave = elem.data('sbehave');
+				if (sbehave == 'creep') {
+					clock.secondHandBehavoir = StationClock.CreepingSecondHand;
+				}
+				else if (sbehave == 'ebounce') {
+					clock.secondHandBehavoir = StationClock.ElasticBouncingSecondHand;
+				}
+				else if (sbehave == 'hasty') {
+					clock.secondHandBehavoir = StationClock.OverhastySecondHand;
+				}
+				else {
+					clock.secondHandBehavoir = StationClock.BouncingSecondHand;
+				}
+			}
+			else {
+				clock.secondHandBehavoir = StationClock.BouncingSecondHand;
+			}
+			
+			if (elem.data('date-color')) {
+				clock.dateColor = elem.data('date-color');
+			}
+			
+			clock.bodyColor = elem.data('body-color');
+			clock.strokeColor = elem.data('stroke-color');
+			clock.dialColor = elem.data('dial-color');
+			clock.hourHandColor = elem.data('hour-color');
+			clock.minuteHandColor = elem.data('minute-color');
+			clock.secondHandColor = elem.data('second-color');
+			clock.bossColor = elem.data('boss-color');
+			
+			var elemCanvas =  jQuery('<canvas/>', {
+                id: 'clock',
+            }).appendTo(elem);
+            elemCanvas.attr({
+                'height': elem.data('size'),
+                'width': elem.data('size'),
+            });
+			
+			window.setInterval(function() { clock.draw() }, 50);
+			
         });
     },
     // mandatory function, get called after start up once and on every FHEM poll
