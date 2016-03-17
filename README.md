@@ -9,7 +9,8 @@ Zeigt eine Analoge Uhr an.
 Stellt eine circa 100 Pixel große Analoguhr dar.
 
 
-[b]data-size[/b]
+data-size
+---
 Ändert die Größe der Uhr.
 [code]
 <div data-type="analogclock"
