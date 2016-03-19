@@ -3,12 +3,6 @@ if(typeof widget_widget == 'undefined') {
     loadplugin('widget_widget');
 }
 
-var isMSIE = /*@cc_on!@*/0;
-
-if (isMSIE) {
-  dynamicload('lib/jquery.analogclock.excanvas.js', null, null, false);
-}
-
 dynamicload('lib/jquery.analogclock.js', null, null, false);
 	
 // widget implementation starts here
