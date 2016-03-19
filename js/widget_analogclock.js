@@ -3,6 +3,12 @@ if(typeof widget_widget == 'undefined') {
     loadplugin('widget_widget');
 }
 
+var isMSIE = /*@cc_on!@*/0;
+
+if (isMSIE) {
+  dynamicload('lib/jquery.analogclock.excanvas.js', null, null, false);
+}
+
 dynamicload('lib/jquery.analogclock.js', null, null, false);
 	
 // widget implementation starts here
@@ -216,16 +222,22 @@ var widget_analogclock = $.extend({}, widget_widget, {
 			clock.secondHandColor = elem.data('second-color');
 			clock.bossColor = elem.data('boss-color');
 			
-			var elemCanvas =  jQuery('<canvas/>', {
-                id: 'clock',
-            }).appendTo(elem);
-            elemCanvas.attr({
-                'height': elem.data('size'),
-                'width': elem.data('size'),
-            });
+			var isclock = document.getElementById('clock');
 			
-			window.setInterval(function() { clock.draw() }, 50);
-			
+			if (isclock) {
+				window.setInterval(function() { clock.draw() }, 50);
+			}
+			else {
+				var elemCanvas =  jQuery('<canvas/>', {
+					id: 'clock',
+				}).appendTo(elem);
+				elemCanvas.attr({
+					'height': elem.data('size'),
+					'width': elem.data('size'),
+				});
+						
+				window.setInterval(function() { clock.draw() }, 50);
+			}
         });
     },
     // mandatory function, get called after start up once and on every FHEM poll
