@@ -1,44 +1,49 @@
-// load widget base functions
-if(typeof widget_widget == 'undefined') {
-    loadplugin('widget_widget');
+"use strict";
+
+function depends_analogclock() {
+    var deps = [];
+    if (!$.fn.StationClock){
+        deps.push("lib/analogclock.js");
+    }
+    return deps;
 }
 
-dynamicload('lib/jquery.analogclock.js', null, null, false);
+var Modul_analogclock = function () {
 	
-// widget implementation starts here
-// change 'widget_example' to 'widget_mywidgetname'
-// and 'widgetname:"example",' to 'widgetname:"mywidgetname",'
-var widget_analogclock = $.extend({}, widget_widget, {
-    widgetname:"analogclock",
-    // privat sub function
-    init_attr: function(elem) {
-        elem.initData('size', '100');
-        elem.initData('date-color', '');
-        elem.initData('body', 'round');
-        elem.initData('body-color', '#FFFFFF');
-        elem.initData('stroke-color', '#000000');
-        elem.initData('dial', 'full');
-        elem.initData('dial-color', '#3C3C3C');
-        elem.initData('hour', 'pointed');
-        elem.initData('hour-color', '#000000');
-        elem.initData('minute', 'pointed');
-        elem.initData('minute-color', '#000000');
-        elem.initData('second', 'bar');
-        elem.initData('second-color', '#C80000');
-        elem.initData('boss', 'none');
-        elem.initData('boss-color', '#000000');
-        elem.initData('mbehave', 'bounce');
-        elem.initData('sbehave', 'bounce');
-    },
-    // mandatory function, get called on start up
-    init: function () {
-        var base = this;
-        this.elements = $('div[data-type="'+this.widgetname+'"]');
-        this.elements.each(function(index) {
-            base.init_attr($(this));
-			var elem = $(this);
+    function init () {
+
+        me.elements = $('div[data-type="' + me.widgetname + '"]', me.area);
+        me.elements.each(function (index) {
+
+            var elem = $(this);
 			
-			var clock = new StationClock("clock");
+			elem.initData('size', '100');
+			elem.initData('date-color', '');
+			elem.initData('body', 'round');
+			elem.initData('body-color', '#FFFFFF');
+			elem.initData('stroke-color', '#000000');
+			elem.initData('dial', 'full');
+			elem.initData('dial-color', '#3C3C3C');
+			elem.initData('hour', 'pointed');
+			elem.initData('hour-color', '#000000');
+			elem.initData('minute', 'pointed');
+			elem.initData('minute-color', '#000000');
+			elem.initData('second', 'bar');
+			elem.initData('second-color', '#C80000');
+			elem.initData('boss', 'none');
+			elem.initData('boss-color', '#000000');
+			elem.initData('mbehave', 'bounce');
+			elem.initData('sbehave', 'bounce');
+			
+			var elemCanvas =  jQuery('<canvas/>', {
+				id: 'clock',
+			}).appendTo(elem);
+			elemCanvas.attr({
+				'height': elem.data('size'),
+				'width': elem.data('size'),
+			});
+			
+			var clock = new StationClock('clock');
 			
 			if (elem.data('body')) {
 				var body = elem.data('body');
@@ -64,7 +69,7 @@ var widget_analogclock = $.extend({}, widget_widget, {
 			else {
 				clock.body = StationClock.RoundBody;
 			}
-			
+		
 			if (elem.data('dial')) {
 				var dial = elem.data('dial');
 				if (dial == 'none') {
@@ -208,33 +213,25 @@ var widget_analogclock = $.extend({}, widget_widget, {
 				clock.dateColor = elem.data('date-color');
 			}
 			
-			clock.bodyColor = elem.data('body-color');
+			clock.bodyColor = elem.data('body-color'); 
 			clock.strokeColor = elem.data('stroke-color');
 			clock.dialColor = elem.data('dial-color');
 			clock.hourHandColor = elem.data('hour-color');
 			clock.minuteHandColor = elem.data('minute-color');
 			clock.secondHandColor = elem.data('second-color');
 			clock.bossColor = elem.data('boss-color');
-			
-			var isclock = document.getElementById('clock');
-			
-			if (isclock) {
-				window.setInterval(function() { clock.draw() }, 50);
-			}
-			else {
-				var elemCanvas =  jQuery('<canvas/>', {
-					id: 'clock',
-				}).appendTo(elem);
-				elemCanvas.attr({
-					'height': elem.data('size'),
-					'width': elem.data('size'),
-				});
-						
-				window.setInterval(function() { clock.draw() }, 50);
-			}
+
+			window.setInterval(function() { clock.draw() }, 50);
         });
-    },
-    // mandatory function, get called after start up once and on every FHEM poll
-    update: function (dev,par) {
     }
-});
+	
+    // public
+    // inherit all public members from base class
+    var me = $.extend(new Modul_widget(), {
+        //override or own public members
+        widgetname: 'analogclock',
+        init: init
+    });
+
+    return me;
+};
