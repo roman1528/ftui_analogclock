@@ -178,7 +178,7 @@ data-second-color
 
 data-boss
 ---
-Ändert das Aussehen des Mittelpunkt's / der Achsabdeckung.
+Ändert das Aussehen des Mittelpunkts / der Achsabdeckung.
 
 	- small		=   kleiner Mittelpunkt
 	- medium	=   mittelgrpßer Mittelpunkt
@@ -195,7 +195,7 @@ data-boss
 
 data-boss-color
 ---
-Änder die Farbe des Mittelpunkt's / der Achsabdeckung.
+Änder die Farbe des Mittelpunkts / der Achsabdeckung.
 ```html
 <div data-type="analogclock"
      data-size="200"
@@ -254,7 +254,3 @@ Ohne data-date-color wird kein Datum dargestellt!
 
 
 Die Uhr basiert auf der "Bahnhofsuhr" von http://www.3quarks.com - Rüdiger Appel
-
-Download:
-
-Grüße^^
